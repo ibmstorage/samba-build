@@ -1188,6 +1188,7 @@ export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
         --with-pie \
         --with-relro \
         --without-fam \
+        --without-ldb-lmdb \
 %if (%{without libsmbclient}) || (%{without libwbclient})
         --private-libraries=%{_samba_private_libraries} \
 %endif
