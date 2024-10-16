@@ -5,7 +5,7 @@
     line: "include('{{ mock_dir }}/glusterfs-nightly-repo.tpl')"
   with_items:
     - "{{ mock_dir }}/centos-stream+epel-next-{{ item }}-x86_64.cfg"
-    - "{{ mock_dir }}/rhel-{{ item }}-x86_64.cfg"
+    #- "{{ mock_dir }}/rhel-{{ item }}-x86_64.cfg"
   loop_control:
     loop_var: mock_config
 
