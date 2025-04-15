@@ -35,4 +35,7 @@
   register: gitbranch
 
 - set_fact:
-    samba_major_version: "{{ 'master' if ('master' in gitbranch.stdout) else (release_version.stdout).split('.')[0] + '.' + (release_version.stdout).split('.')[1] }}"
+    samba_major_version_base: "{{ 'master' if ('master' in gitbranch.stdout) else (release_version.stdout).split('.')[0] + '.' + (release_version.stdout).split('.')[1] }}"
+
+- set_fact:
+    samba_major_version: "{{ samba_major_version_base }}.ibm.1"
