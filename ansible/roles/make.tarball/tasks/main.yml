@@ -23,7 +23,7 @@
     samba_rpm_version: "{{ gitdate + '.' + githash if ('master' in gitbranch.stdout) else release_version.stdout + '.' + gitdate + '.' + githash }}"
 
 - set_fact:
-    samba_prefix: "samba-{{ samba_rpm_version }}"
+    samba_prefix: "samba-{{ samba_rpm_version }}.ibm.1"
 
 - set_fact:
     samba_tarball: "{{ spec_dir}}/{{ samba_prefix }}.tar.gz"
