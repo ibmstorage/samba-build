@@ -1,2 +1,7 @@
 - name: build fedora {{ os_vers }} rpms
   command: /usr/bin/mock --root {{ mock_dir }}/fedora-{{ os_vers }}-{{ os_arch }}.cfg --resultdir {{ rpms_dir }}/{{ samba_major_version }}/fedora/{{ os_vers }}/{{ os_arch }} --rebuild {{ srpm_dir }}/{{ samba_srpm }}
+  when: vendor_dist_suffix is not defined
+
+- name: build fedora {{ os_vers }} rpms
+  command: /usr/bin/mock --root {{ mock_dir }}/fedora-{{ os_vers }}-{{ os_arch }}.cfg --resultdir {{ rpms_dir }}/{{ samba_major_version }}/fedora/{{ os_vers }}/{{ os_arch }} --define "vendor_dist {{ vendor_dist_suffix }}" --rebuild {{ srpm_dir }}/{{ samba_srpm }}
+  when: vendor_dist_suffix is defined

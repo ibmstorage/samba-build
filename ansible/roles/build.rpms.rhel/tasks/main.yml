@@ -1,7 +1,14 @@
 ---
-- name: Build rhel {{ os_vers }} rpms locally
+- name: Build rpms using mock
+  block:
+    - name: Build rhel {{ os_vers }} rpms locally
+      command: /usr/bin/mock --root {{ mock_dir }}/rhel-{{ os_vers }}-{{ os_arch }}.cfg --resultdir {{ rpms_dir }}/{{ samba_major_version }}/rhel/{{ os_vers }}/{{ os_arch }} --rebuild {{ srpm_dir }}/{{ samba_srpm }}
+      when: vendor_dist_suffix is not defined
+
+    - name: Build rhel {{ os_vers }} rpms locally with added vendor dist
+      command: /usr/bin/mock --root {{ mock_dir }}/rhel-{{ os_vers }}-{{ os_arch }}.cfg --resultdir {{ rpms_dir }}/{{ samba_major_version }}/rhel/{{ os_vers }}/{{ os_arch }} --define "vendor_dist {{ vendor_dist_suffix }}" --rebuild {{ srpm_dir }}/{{ samba_srpm }}
+      when: vendor_dist_suffix is defined
   when: org_id is undefined or act_key is undefined
-  command: /usr/bin/mock --root {{ mock_dir }}/rhel-{{ os_vers }}-{{ os_arch }}.cfg --resultdir {{ rpms_dir }}/{{ samba_major_version }}/rhel/{{ os_vers }}/{{ os_arch }} --rebuild {{ srpm_dir }}/{{ samba_srpm }}
 
 - name: Build rhel {{ os_vers }} rpms in a container
   when: org_id is defined and act_key is defined
@@ -25,3 +32,4 @@
       RPMS_DIR: "{{ rpms_dir }}"
       SAMBA_SRPM: "{{ samba_srpm }}"
       SAMBA_VERS: "{{ samba_major_version }}"
+      VENDOR_DIST_SUFFIX: "{{ vendor_dist_suffix | default('') }}"

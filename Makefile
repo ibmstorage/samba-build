@@ -21,6 +21,10 @@ ifneq ($(ceph_repo_gpgkey),)
 	EXTRA_VARS += ceph_repo_gpgkey=$(ceph_repo_gpgkey)
 endif
 
+ifneq ($(vendor_dist_suffix),)
+	EXTRA_VARS += vendor_dist_suffix=$(vendor_dist_suffix)
+endif
+
 prep.dirs:
 	@ansible-playbook --inventory localhost, ./ansible/prep.dirs.yml
 
