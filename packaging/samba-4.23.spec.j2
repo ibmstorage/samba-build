@@ -81,6 +81,12 @@
 
 %bcond_without prometheus_endpoint
 
+%if 0%{?rhel}
+%bcond_without varlink
+%else
+%bcond_with varlink
+%endif
+
 %global baserelease 1
 
 %global samba_version {{ samba_rpm_version }}
@@ -222,6 +228,9 @@ BuildRequires: libicu-devel
 BuildRequires: libcmocka-devel
 BuildRequires: libtirpc-devel
 BuildRequires: libuuid-devel
+%if %{with varlink}
+BuildRequires: libvarlink-devel
+%endif
 BuildRequires: libxslt
 BuildRequires: lmdb
 %if %{with winexe}
@@ -1222,6 +1231,9 @@ export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 %endif
 %if %{without gettext}
         --without-gettext \
+%endif
+%if %{with varlink}
+        --with-varlink \
 %endif
 %if %{with prometheus_endpoint}
         --with-prometheus-exporter \
