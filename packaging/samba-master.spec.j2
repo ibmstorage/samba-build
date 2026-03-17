@@ -87,6 +87,12 @@
 
 %bcond_without prometheus_endpoint
 
+%if 0%{?fedora} || 0%{?rhel} >= 10
+%bcond_without varlink
+%else
+%bcond_with varlink
+%endif
+
 %global baserelease 1
 
 %global samba_version {{ samba_rpm_version }}
@@ -224,6 +230,9 @@ BuildRequires: libattr-devel
 BuildRequires: libcap-devel
 %if %{with prometheus_endpoint}
 BuildRequires: libevent-devel
+%endif
+%if %{with varlink}
+BuildRequires: libvarlink-devel
 %endif
 BuildRequires: libicu-devel
 %if %{without libcmocka}
@@ -1234,6 +1243,9 @@ export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 %endif
 %if %{with prometheus_endpoint}
         --with-prometheus-exporter \
+%endif
+%if %{with varlink}
+        --with-varlink \
 %endif
         --with-profiling-data \
         --with-systemd \
