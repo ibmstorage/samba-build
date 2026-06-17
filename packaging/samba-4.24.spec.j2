@@ -95,6 +95,8 @@
 
 %bcond_without ratelimitd
 
+%bcond_without vfs_cephrgw
+
 %global baserelease 1
 
 %global samba_version {{ samba_rpm_version }}
@@ -289,6 +291,10 @@ BuildRequires: libglusterfs-devel >= 3.4.0.16
 
 %if %{with vfs_cephfs}
 BuildRequires: libcephfs-devel
+%endif
+
+%if %{with vfs_cephrgw}
+BuildRequires: librgw-devel
 %endif
 
 %if %{with vfs_io_uring}
@@ -622,6 +628,21 @@ Provides: bundled(libreplace)
 %description vfs-cephfs
 Samba VFS module for Ceph distributed storage system integration.
 #endif {with vfs_cephfs}
+%endif
+
+%if %{with vfs_cephrgw}
+%package vfs-cephrgw
+Summary: Samba VFS module for Ceph RGW
+Requires: librgw2
+Requires: %{name} = %{samba_depver}
+Requires: %{name}-client-libs = %{samba_depver}
+Requires: %{name}-libs = %{samba_depver}
+
+Provides: bundled(libreplace)
+
+%description vfs-cephrgw
+Samba VFS module for Ceph RGW integration.
+#endif {with vfs_cephrgw}
 %endif
 
 ### IOURING
@@ -1224,6 +1245,9 @@ export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 %endif
 %if %{without vfs_cephfs}
         --disable-cephfs \
+%endif
+%if %{without vfs_cephrgw}
+        --disable-cephrgw \
 %endif
 %if %{with clustering}
         --with-cluster-support \
@@ -2285,6 +2309,13 @@ fi
 %{_libdir}/samba/vfs/ceph_new.so
 %{_mandir}/man8/vfs_ceph.8*
 %{_mandir}/man8/vfs_ceph_new.8*
+%endif
+
+### VFS-CEPHRGW
+%if %{with vfs_cephrgw}
+%files vfs-cephrgw
+%{_libdir}/samba/vfs/ceph_rgw.so
+%{_mandir}/man8/vfs_ceph_rgw.8*
 %endif
 
 ### VFS-IOURING
