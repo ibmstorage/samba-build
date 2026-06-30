@@ -12,6 +12,7 @@
     command: /tmp/files/rpm-build.sh
     detach: false
     rm: true
+    network: host
     volume:
       - "{{ role_path }}/files:/tmp/files:z"
       - "{{ build_dir }}:{{ build_dir }}:z"
